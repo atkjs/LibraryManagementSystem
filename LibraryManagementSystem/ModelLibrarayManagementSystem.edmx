@@ -1,0 +1,654 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LibrarayManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_book">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BookName" Type="varchar" MaxLength="255" />
+          <Property Name="Author" Type="varchar" MaxLength="255" />
+          <Property Name="Publication" Type="varchar" MaxLength="255" />
+          <Property Name="Subject" Type="varchar" MaxLength="255" />
+          <Property Name="NoOfCopies" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_bookIssue">
+          <Key>
+            <PropertyRef Name="BookIssueId" />
+          </Key>
+          <Property Name="BookIssueId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IssuDate" Type="date" />
+          <Property Name="ReturnDate" Type="date" />
+          <Property Name="BookId" Type="int" />
+          <Property Name="StudentId" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegNo" Type="int" />
+          <Property Name="Branch" Type="varchar" MaxLength="255" />
+          <Property Name="Section" Type="varchar" MaxLength="255" />
+          <Property Name="Semester" Type="varchar" MaxLength="255" />
+          <Property Name="YearOfAdmision" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_StudentLogin">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="NumberOfBooks" Type="int" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_teacher">
+          <Key>
+            <PropertyRef Name="TeacherId" />
+          </Key>
+          <Property Name="TeacherId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Designation" Type="varchar" MaxLength="255" />
+          <Property Name="Branch" Type="varchar" MaxLength="255" />
+          <Property Name="ContactNo" Type="int" />
+          <Property Name="Lectures" Type="varchar(max)" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_TeacherLogin">
+          <Key>
+            <PropertyRef Name="TLoginId" />
+          </Key>
+          <Property Name="TLoginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="TeacherId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__tbl_bookI__BookI__07020F21">
+          <End Role="tbl_book" Type="Self.tbl_book" Multiplicity="0..1" />
+          <End Role="tbl_bookIssue" Type="Self.tbl_bookIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_book">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="tbl_bookIssue">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_bookI__Stude__07F6335A">
+          <End Role="tbl_student" Type="Self.tbl_student" Multiplicity="0..1" />
+          <End Role="tbl_bookIssue" Type="Self.tbl_bookIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="tbl_bookIssue">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Stude__Stude__0CBAE877">
+          <End Role="tbl_student" Type="Self.tbl_student" Multiplicity="0..1" />
+          <End Role="tbl_StudentLogin" Type="Self.tbl_StudentLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="tbl_StudentLogin">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Teach__Teach__117F9D94">
+          <End Role="tbl_teacher" Type="Self.tbl_teacher" Multiplicity="0..1" />
+          <End Role="tbl_TeacherLogin" Type="Self.tbl_TeacherLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_teacher">
+              <PropertyRef Name="TeacherId" />
+            </Principal>
+            <Dependent Role="tbl_TeacherLogin">
+              <PropertyRef Name="TeacherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="bookTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="checkStudentId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="searchBook" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sesrch" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="showAllBooks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showPandingStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showPandingStudentLib" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showPandingTeacher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showPandingTeacherLib" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="studentApprovde" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="StudentForget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="pass" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="studentLibApprovde" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TeacherAppdove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TeacherAppdoveLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TeacherForget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="pass" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="LibrarayManagementSystemModelStoreContainer">
+          <EntitySet Name="tbl_book" EntityType="Self.tbl_book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_bookIssue" EntityType="Self.tbl_bookIssue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_student" EntityType="Self.tbl_student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_StudentLogin" EntityType="Self.tbl_StudentLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_teacher" EntityType="Self.tbl_teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_TeacherLogin" EntityType="Self.tbl_TeacherLogin" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tbl_bookI__BookI__07020F21" Association="Self.FK__tbl_bookI__BookI__07020F21">
+            <End Role="tbl_book" EntitySet="tbl_book" />
+            <End Role="tbl_bookIssue" EntitySet="tbl_bookIssue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_bookI__Stude__07F6335A" Association="Self.FK__tbl_bookI__Stude__07F6335A">
+            <End Role="tbl_student" EntitySet="tbl_student" />
+            <End Role="tbl_bookIssue" EntitySet="tbl_bookIssue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Stude__Stude__0CBAE877" Association="Self.FK__tbl_Stude__Stude__0CBAE877">
+            <End Role="tbl_student" EntitySet="tbl_student" />
+            <End Role="tbl_StudentLogin" EntitySet="tbl_StudentLogin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Teach__Teach__117F9D94" Association="Self.FK__tbl_Teach__Teach__117F9D94">
+            <End Role="tbl_teacher" EntitySet="tbl_teacher" />
+            <End Role="tbl_TeacherLogin" EntitySet="tbl_TeacherLogin" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibrarayManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_book">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BookName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Author" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Publication" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Subject" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NoOfCopies" Type="Int32" />
+          <NavigationProperty Name="tbl_bookIssue" Relationship="Self.FK__tbl_bookI__BookI__07020F21" FromRole="tbl_book" ToRole="tbl_bookIssue" />
+        </EntityType>
+        <EntityType Name="tbl_bookIssue">
+          <Key>
+            <PropertyRef Name="BookIssueId" />
+          </Key>
+          <Property Name="BookIssueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IssuDate" Type="DateTime" Precision="0" />
+          <Property Name="ReturnDate" Type="DateTime" Precision="0" />
+          <Property Name="BookId" Type="Int32" />
+          <Property Name="StudentId" Type="Int32" />
+          <NavigationProperty Name="tbl_book" Relationship="Self.FK__tbl_bookI__BookI__07020F21" FromRole="tbl_bookIssue" ToRole="tbl_book" />
+          <NavigationProperty Name="tbl_student" Relationship="Self.FK__tbl_bookI__Stude__07F6335A" FromRole="tbl_bookIssue" ToRole="tbl_student" />
+        </EntityType>
+        <EntityType Name="tbl_student">
+          <Key>
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegNo" Type="Int32" />
+          <Property Name="Branch" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Section" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Semester" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="YearOfAdmision" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_bookIssue" Relationship="Self.FK__tbl_bookI__Stude__07F6335A" FromRole="tbl_student" ToRole="tbl_bookIssue" />
+          <NavigationProperty Name="tbl_StudentLogin" Relationship="Self.FK__tbl_Stude__Stude__0CBAE877" FromRole="tbl_student" ToRole="tbl_StudentLogin" />
+        </EntityType>
+        <EntityType Name="tbl_StudentLogin">
+          <Key>
+            <PropertyRef Name="LoginId" />
+          </Key>
+          <Property Name="LoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NumberOfBooks" Type="Int32" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_student" Relationship="Self.FK__tbl_Stude__Stude__0CBAE877" FromRole="tbl_StudentLogin" ToRole="tbl_student" />
+        </EntityType>
+        <EntityType Name="tbl_teacher">
+          <Key>
+            <PropertyRef Name="TeacherId" />
+          </Key>
+          <Property Name="TeacherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Branch" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="Int32" />
+          <Property Name="Lectures" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_TeacherLogin" Relationship="Self.FK__tbl_Teach__Teach__117F9D94" FromRole="tbl_teacher" ToRole="tbl_TeacherLogin" />
+        </EntityType>
+        <EntityType Name="tbl_TeacherLogin">
+          <Key>
+            <PropertyRef Name="TLoginId" />
+          </Key>
+          <Property Name="TLoginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TeacherId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_teacher" Relationship="Self.FK__tbl_Teach__Teach__117F9D94" FromRole="tbl_TeacherLogin" ToRole="tbl_teacher" />
+        </EntityType>
+        <Association Name="FK__tbl_bookI__BookI__07020F21">
+          <End Role="tbl_book" Type="Self.tbl_book" Multiplicity="0..1" />
+          <End Role="tbl_bookIssue" Type="Self.tbl_bookIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_book">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="tbl_bookIssue">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_bookI__Stude__07F6335A">
+          <End Role="tbl_student" Type="Self.tbl_student" Multiplicity="0..1" />
+          <End Role="tbl_bookIssue" Type="Self.tbl_bookIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="tbl_bookIssue">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Stude__Stude__0CBAE877">
+          <End Role="tbl_student" Type="Self.tbl_student" Multiplicity="0..1" />
+          <End Role="tbl_StudentLogin" Type="Self.tbl_StudentLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_student">
+              <PropertyRef Name="StudentId" />
+            </Principal>
+            <Dependent Role="tbl_StudentLogin">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tbl_Teach__Teach__117F9D94">
+          <End Role="tbl_teacher" Type="Self.tbl_teacher" Multiplicity="0..1" />
+          <End Role="tbl_TeacherLogin" Type="Self.tbl_TeacherLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_teacher">
+              <PropertyRef Name="TeacherId" />
+            </Principal>
+            <Dependent Role="tbl_TeacherLogin">
+              <PropertyRef Name="TeacherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibrarayManagementSystemEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_book" EntityType="Self.tbl_book" />
+          <EntitySet Name="tbl_bookIssue" EntityType="Self.tbl_bookIssue" />
+          <EntitySet Name="tbl_student" EntityType="Self.tbl_student" />
+          <EntitySet Name="tbl_StudentLogin" EntityType="Self.tbl_StudentLogin" />
+          <EntitySet Name="tbl_teacher" EntityType="Self.tbl_teacher" />
+          <EntitySet Name="tbl_TeacherLogin" EntityType="Self.tbl_TeacherLogin" />
+          <AssociationSet Name="FK__tbl_bookI__BookI__07020F21" Association="Self.FK__tbl_bookI__BookI__07020F21">
+            <End Role="tbl_book" EntitySet="tbl_book" />
+            <End Role="tbl_bookIssue" EntitySet="tbl_bookIssue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_bookI__Stude__07F6335A" Association="Self.FK__tbl_bookI__Stude__07F6335A">
+            <End Role="tbl_student" EntitySet="tbl_student" />
+            <End Role="tbl_bookIssue" EntitySet="tbl_bookIssue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Stude__Stude__0CBAE877" Association="Self.FK__tbl_Stude__Stude__0CBAE877">
+            <End Role="tbl_student" EntitySet="tbl_student" />
+            <End Role="tbl_StudentLogin" EntitySet="tbl_StudentLogin" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tbl_Teach__Teach__117F9D94" Association="Self.FK__tbl_Teach__Teach__117F9D94">
+            <End Role="tbl_teacher" EntitySet="tbl_teacher" />
+            <End Role="tbl_TeacherLogin" EntitySet="tbl_TeacherLogin" />
+          </AssociationSet>
+          <FunctionImport Name="showPandingStudent" ReturnType="Collection(LibrarayManagementSystemModel.showPandingStudent_Result1)" />
+          <FunctionImport Name="showPandingStudentLib" ReturnType="Collection(LibrarayManagementSystemModel.showPandingStudentLib_Result)" />
+          <FunctionImport Name="showPandingTeacher" ReturnType="Collection(LibrarayManagementSystemModel.showPandingTeacher_Result)" />
+          <FunctionImport Name="showPandingTeacherLib" ReturnType="Collection(LibrarayManagementSystemModel.showPandingTeacherLib_Result)" />
+          <FunctionImport Name="studentApprovde">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="studentLibApprovde">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TeacherAppdove">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TeacherAppdoveLogin">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="showAllBooks" ReturnType="Collection(LibrarayManagementSystemModel.showAllBooks_Result)" />
+          <FunctionImport Name="checkStudentId" ReturnType="Collection(LibrarayManagementSystemModel.checkStudentId_Result)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="StudentForget">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="TeacherForget">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="searchBook" ReturnType="Collection(LibrarayManagementSystemModel.searchBook_Result)">
+          <Parameter Name="sesrch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="bookTransaction" ReturnType="Collection(LibrarayManagementSystemModel.bookTransaction_Result1)" />
+        </EntityContainer>
+        <ComplexType Name="showPandingStudent_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="Int32" Name="RegNo" Nullable="true" />
+          <Property Type="String" Name="Branch" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Semester" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="YearOfAdmision" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showPandingStudent_Result1">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="Int32" Name="RegNo" Nullable="true" />
+          <Property Type="String" Name="Branch" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Semester" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="YearOfAdmision" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showPandingStudentLib_Result">
+          <Property Type="Int32" Name="LoginId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="NumberOfBooks" Nullable="true" />
+          <Property Type="Int32" Name="StudentId" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showPandingTeacher_Result">
+          <Property Type="Int32" Name="TeacherId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Branch" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="ContactNo" Nullable="true" />
+          <Property Type="String" Name="Lectures" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showPandingTeacherLib_Result">
+          <Property Type="Int32" Name="TLoginId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="TeacherId" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showAllBooks_Result">
+          <Property Type="Int32" Name="BookId" Nullable="false" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Publication" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Subject" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="NoOfCopies" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="checkStudentId_Result">
+          <Property Type="Int32" Name="StudentId" Nullable="false" />
+          <Property Type="Int32" Name="RegNo" Nullable="true" />
+          <Property Type="String" Name="Branch" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Semester" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="YearOfAdmision" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="searchBook_Result">
+          <Property Type="Int32" Name="BookId" Nullable="false" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Publication" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Subject" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="NoOfCopies" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="bookTransaction_Result">
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Semester" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Publication" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="255" />
+          <Property Type="DateTime" Name="IssuDate" Nullable="true" />
+          <Property Type="DateTime" Name="ReturnDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="bookTransaction_Result1">
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Semester" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Section" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="BookName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Publication" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Author" Nullable="true" MaxLength="255" />
+          <Property Type="DateTime" Name="IssuDate" Nullable="true" />
+          <Property Type="DateTime" Name="ReturnDate" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibrarayManagementSystemModelStoreContainer" CdmEntityContainer="LibrarayManagementSystemEntities1">
+          <EntitySetMapping Name="tbl_book">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_book">
+              <MappingFragment StoreEntitySet="tbl_book">
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Publication" ColumnName="Publication" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="NoOfCopies" ColumnName="NoOfCopies" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_bookIssue">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_bookIssue">
+              <MappingFragment StoreEntitySet="tbl_bookIssue">
+                <ScalarProperty Name="BookIssueId" ColumnName="BookIssueId" />
+                <ScalarProperty Name="IssuDate" ColumnName="IssuDate" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_student">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_student">
+              <MappingFragment StoreEntitySet="tbl_student">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Semester" ColumnName="Semester" />
+                <ScalarProperty Name="YearOfAdmision" ColumnName="YearOfAdmision" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_StudentLogin">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_StudentLogin">
+              <MappingFragment StoreEntitySet="tbl_StudentLogin">
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="NumberOfBooks" ColumnName="NumberOfBooks" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_teacher">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_teacher">
+              <MappingFragment StoreEntitySet="tbl_teacher">
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Lectures" ColumnName="Lectures" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_TeacherLogin">
+            <EntityTypeMapping TypeName="LibrarayManagementSystemModel.tbl_TeacherLogin">
+              <MappingFragment StoreEntitySet="tbl_TeacherLogin">
+                <ScalarProperty Name="TLoginId" ColumnName="TLoginId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="showPandingStudent" FunctionName="LibrarayManagementSystemModel.Store.showPandingStudent">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.showPandingStudent_Result1">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Semester" ColumnName="Semester" />
+                <ScalarProperty Name="YearOfAdmision" ColumnName="YearOfAdmision" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="showPandingStudentLib" FunctionName="LibrarayManagementSystemModel.Store.showPandingStudentLib">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.showPandingStudentLib_Result">
+                <ScalarProperty Name="LoginId" ColumnName="LoginId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="NumberOfBooks" ColumnName="NumberOfBooks" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="showPandingTeacher" FunctionName="LibrarayManagementSystemModel.Store.showPandingTeacher">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.showPandingTeacher_Result">
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Lectures" ColumnName="Lectures" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="showPandingTeacherLib" FunctionName="LibrarayManagementSystemModel.Store.showPandingTeacherLib">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.showPandingTeacherLib_Result">
+                <ScalarProperty Name="TLoginId" ColumnName="TLoginId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="studentApprovde" FunctionName="LibrarayManagementSystemModel.Store.studentApprovde" />
+          <FunctionImportMapping FunctionImportName="studentLibApprovde" FunctionName="LibrarayManagementSystemModel.Store.studentLibApprovde" />
+          <FunctionImportMapping FunctionImportName="TeacherAppdove" FunctionName="LibrarayManagementSystemModel.Store.TeacherAppdove" />
+          <FunctionImportMapping FunctionImportName="TeacherAppdoveLogin" FunctionName="LibrarayManagementSystemModel.Store.TeacherAppdoveLogin" />
+          <FunctionImportMapping FunctionImportName="showAllBooks" FunctionName="LibrarayManagementSystemModel.Store.showAllBooks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.showAllBooks_Result">
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Publication" ColumnName="Publication" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="NoOfCopies" ColumnName="NoOfCopies" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="checkStudentId" FunctionName="LibrarayManagementSystemModel.Store.checkStudentId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.checkStudentId_Result">
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="RegNo" ColumnName="RegNo" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="Semester" ColumnName="Semester" />
+                <ScalarProperty Name="YearOfAdmision" ColumnName="YearOfAdmision" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="StudentForget" FunctionName="LibrarayManagementSystemModel.Store.StudentForget" />
+          <FunctionImportMapping FunctionImportName="TeacherForget" FunctionName="LibrarayManagementSystemModel.Store.TeacherForget" />
+          <FunctionImportMapping FunctionImportName="searchBook" FunctionName="LibrarayManagementSystemModel.Store.searchBook">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.searchBook_Result">
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Publication" ColumnName="Publication" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="NoOfCopies" ColumnName="NoOfCopies" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="bookTransaction" FunctionName="LibrarayManagementSystemModel.Store.bookTransaction">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="LibrarayManagementSystemModel.bookTransaction_Result1">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Semester" ColumnName="Semester" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+                <ScalarProperty Name="Publication" ColumnName="Publication" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="IssuDate" ColumnName="IssuDate" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
